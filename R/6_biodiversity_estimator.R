@@ -449,7 +449,7 @@ GraphicMA <- ggplot(resultados_MA) +
 ggsave("EstimatorMA.png", plot = GraphicMA, width = 6, height = 4, dpi = 300)
 
 #Extrapolation & Interpolation
-#data preparing 
+#preparing data 
 dados_inextMA <- hexMA %>%
   select(-amostra_hex) %>%
   select(where(~ is.numeric(.) && sum(.) != 0))
@@ -514,7 +514,7 @@ GraphicAM <- ggplot(resultados_AM) +
 ggsave("EstimatorAM.png", plot = GraphicAM, width = 6, height = 4, dpi = 300)
 
 #Extrapolation & Interpolation
-#preparando dados 
+#preparing data 
 dados_inextAM <- hexAM %>%
   select(-amostra_hex) %>%
   select(where(~ is.numeric(.) && sum(.) != 0))
@@ -523,7 +523,7 @@ dados_inextAM <- as.incfreq(t(dados_inextAM))
 
 iNEXTAM <- iNEXT(dados_inextAM, q = 0, datatype = "incidence_freq", 
                  endpoint = 224)
-## Gráfico
+#Graphic
 Graphic2AM <- ggiNEXT(iNEXTAM, type = 1) +
   scale_colour_manual(values = "black") +
   scale_fill_manual(values = "black") +
@@ -533,7 +533,7 @@ Graphic2AM <- ggiNEXT(iNEXTAM, type = 1) +
 
 ggsave("EstimatorAM2.png", plot = Graphic2AM, width = 6, height = 4, dpi = 300)
 
-#Pantanal (REMOVIDO - SEM AMOSTRAS SUFICIENTES)
+#Pantanal
 #Estimators
 estima <- poolaccum(hexPT, permutations = 10)
 resultados_PT <- summary(estima, display = c("S", "chao", "jack1", "jack2", "boot"))
@@ -541,7 +541,7 @@ resultados_PT$chao <- setNames(resultados_PT$chao, c("Amostras", "Chao2", "Chao2
 resultados_PT <- cbind(resultados_PT$chao[, 1:4], resultados_PT$S[, 2:4], resultados_PT$jack1[, 2:4],
                        resultados_PT$jack2[, 2:4], resultados_PT$boot[,2:4])
 
-#Renomeando as colunas após a combinação
+#rename columns
 resultados_PT <- as.data.frame(resultados_PT) %>%
   setNames(make.unique(names(.))) %>%  
   rename(Amostras = N,
@@ -563,41 +563,14 @@ resultados_PT <- as.data.frame(resultados_PT) %>%
 
 #Graphic
 GraphicPT <- ggplot(resultados_PT) +
-#  geom_point(aes(y = Chao2, x = Amostras, group = 1), size = 3, color = "darkorange") +
   geom_point(aes(y = Riqueza, x = Amostras, group = 1), size = 1, color = "black") +
-#  geom_point(aes(y = JACK1, x = Amostras, group = 1), size = 3, color = "pink") +
-#  geom_point(aes(y = JACK2, x = Amostras, group = 1), size = 3, color = "red") + 
-#  geom_point(aes(y = BOOT, x = Amostras, group = 1), size = 3, color = "green") + 
-#  geom_line(aes(y = Chao2, x = Amostras), color = "darkorange", size = 3) +
   geom_line(aes(y = Riqueza, x = Amostras), color = "black", size = 1) +
-#  geom_line(aes(y = JACK1, x = Amostras, group = 1), size = 3, color = "pink") +
-#  geom_line(aes(y = JACK2, x = Amostras, group = 1), size = 3, color = "red") +
-#  geom_line(aes(y = BOOT, x = Amostras, group = 1), size = 3, color = "green") + 
   scale_x_continuous(breaks = seq(0, max(resultados_PT$Amostras), by = 50)) +
   labs(x = "Number of samples", y = "Species Richness")+
   theme_bw()
 
 #exporting this Graphic
 ggsave("EstimatorPT.png", plot = GraphicPT, width = 6, height = 4, dpi = 300)
-
-#Extrapolation & Interpolation
-#preparando dados 
-#dados_inextPT <- hexPT %>%
-#  select(-amostra_hex) %>%
-#  select(where(~ is.numeric(.) && sum(.) != 0))
-
-#dados_inextPT <- as.incfreq(t(dados_inextPT))
-
-#iNEXTPT <- iNEXT(dados_inextPT, q = 0, datatype = "incidence_freq", 
-#                 endpoint = 33)
-## Gráfico
-#Graphic2PT <- ggiNEXT(iNEXTPT, type = 1) +
-#  scale_linetype_discrete(labels = c("Interpolado", "Extrapolado")) +
-#  scale_colour_manual(values = "darkorange") +
-#  scale_fill_manual(values = "darkorange") +
-#  labs(x = "Número de amostras", y = " Riqueza de espécies")
-
-#ggsave("EstimatorPT2.png", plot = Graphic2PT, width = 6, height = 4, dpi = 300)
 
 #Cerrado
 #Estimators
@@ -607,7 +580,7 @@ resultados_CE$chao <- setNames(resultados_CE$chao, c("Amostras", "Chao2", "Chao2
 resultados_CE <- cbind(resultados_CE$chao[, 1:4], resultados_CE$S[, 2:4], resultados_CE$jack1[, 2:4],
                        resultados_CE$jack2[, 2:4], resultados_CE$boot[,2:4])
 
-#Renomeando as colunas após a combinação
+#rename columns
 resultados_CE <- as.data.frame(resultados_CE) %>%
   setNames(make.unique(names(.))) %>%  
   rename(Amostras = N,
@@ -645,7 +618,7 @@ GraphicCE <- ggplot(resultados_CE) +
 ggsave("EstimatorCE.png", plot = GraphicCE, width = 6, height = 4, dpi = 300)
 
 #Extrapolation & Interpolation
-#preparando dados 
+#Data preparing
 dados_inextCE <- hexCE %>%
   select(-amostra_hex) %>%
   select(where(~ is.numeric(.) && sum(.) != 0))
@@ -654,7 +627,7 @@ dados_inextCE <- as.incfreq(t(dados_inextCE))
 
 iNEXTCE <- iNEXT(dados_inextCE, q = 0, datatype = "incidence_freq", 
                  endpoint = 164)
-## Gráfico
+#Graphic
 Graphic2CE <- ggiNEXT(iNEXTCE, type = 1) +
   scale_colour_manual(values = "black") +
   scale_fill_manual(values = "black") +
@@ -664,7 +637,7 @@ Graphic2CE <- ggiNEXT(iNEXTCE, type = 1) +
 
 ggsave("EstimatorCE2.png", plot = Graphic2CE, width = 6, height = 4, dpi = 300)
 
-#Pampa (REMOVIDO - SEM AMOSTRAS SUFICIENTES)
+#Pampa 
 #Estimators
 estima <- poolaccum(hexPP, permutations = 100)
 resultados_PP <- summary(estima, display = c("S", "chao", "jack1", "jack2", "boot"))
@@ -672,7 +645,7 @@ resultados_PP$chao <- setNames(resultados_PP$chao, c("Amostras", "Chao2", "Chao2
 resultados_PP <- cbind(resultados_PP$chao[, 1:4], resultados_PP$S[, 2:4], resultados_PP$jack1[, 2:4],
                        resultados_PP$jack2[, 2:4], resultados_PP$boot[,2:4])
 
-#Renomeando as colunas após a combinação
+#rename columns
 resultados_PP <- as.data.frame(resultados_PP) %>%
   setNames(make.unique(names(.))) %>%  
   rename(Amostras = N,
@@ -694,16 +667,8 @@ resultados_PP <- as.data.frame(resultados_PP) %>%
 
 #Graphic
 GraphicPP <- ggplot(resultados_PP) +
-#  geom_point(aes(y = Chao2, x = Amostras, group = 1), size = 3, color = "darkorange") +
   geom_point(aes(y = Riqueza, x = Amostras, group = 1), size = 1, color = "black") +
-#  geom_point(aes(y = JACK1, x = Amostras, group = 1), size = 3, color = "pink") +
-#  geom_point(aes(y = JACK2, x = Amostras, group = 1), size = 3, color = "red") + 
-#  geom_point(aes(y = BOOT, x = Amostras, group = 1), size = 3, color = "green") + 
-#  geom_line(aes(y = Chao2, x = Amostras), color = "darkorange", size = 3) +
   geom_line(aes(y = Riqueza, x = Amostras), color = "black", size = 1) +
-#  geom_line(aes(y = JACK1, x = Amostras, group = 1), size = 3, color = "pink") +
-#  geom_line(aes(y = JACK2, x = Amostras, group = 1), size = 3, color = "red") +
-#  geom_line(aes(y = BOOT, x = Amostras, group = 1), size = 3, color = "green") + 
   scale_x_continuous(breaks = seq(0, max(resultados_PP$Amostras), by = 50)) +
   labs(x = "Number of samples", y = "Species Richness")+
   theme_bw()
@@ -711,24 +676,6 @@ GraphicPP <- ggplot(resultados_PP) +
 #exporting this Graphic
 ggsave("EstimatorPP.png", plot = GraphicPP, width = 6, height = 4, dpi = 300)
 
-#Extrapolation & Interpolation
-#preparando dados 
-#dados_inextPP <- hexPP %>%
-#  select(-amostra_hex) %>%
-#  select(where(~ is.numeric(.) && sum(.) != 0))
-
-#dados_inextPP <- as.incfreq(t(dados_inextPP))
-
-#iNEXTPP <- iNEXT(dados_inextPP, q = 0, datatype = "incidence_freq", 
-#                 endpoint = 41)
-## Gráfico
-#Graphic2PP <- ggiNEXT(iNEXTPP, type = 1) +
-#  scale_linetype_discrete(labels = c("Interpolado", "Extrapolado")) +
-#  scale_colour_manual(values = "darkorange") +
-#  scale_fill_manual(values = "darkorange") +
-#  labs(x = "Número de amostras", y = " Riqueza de espécies")
-
-#ggsave("EstimatorPP2.png", plot = Graphic2PP, width = 6, height = 4, dpi = 300)
 
 #Caatinga
 #Estimators
@@ -738,7 +685,7 @@ resultados_CA$chao <- setNames(resultados_CA$chao, c("Amostras", "Chao2", "Chao2
 resultados_CA <- cbind(resultados_CA$chao[, 1:4], resultados_CA$S[, 2:4], resultados_CA$jack1[, 2:4],
                        resultados_CA$jack2[, 2:4], resultados_CA$boot[,2:4])
 
-#Renomeando as colunas após a combinação
+#rename columns
 resultados_CA <- as.data.frame(resultados_CA) %>%
   setNames(make.unique(names(.))) %>%  
   rename(Amostras = N,
@@ -776,7 +723,7 @@ GraphicCA <- ggplot(resultados_CA) +
 ggsave("EstimatorCA.png", plot = GraphicCA, width = 6, height = 4, dpi = 300)
 
 #Extrapolation & Interpolation
-#preparando dados 
+#data preparing
 dados_inextCA <- hexCA %>%
   select(-amostra_hex) %>%
   select(where(~ is.numeric(.) && sum(.) != 0))
@@ -785,7 +732,7 @@ dados_inextCA <- as.incfreq(t(dados_inextCA))
 
 iNEXTCA <- iNEXT(dados_inextCA, q = 0, datatype = "incidence_freq", 
                  endpoint = 36)
-## Gráfico
+#Graphic
 Graphic2CA <- ggiNEXT(iNEXTCA, type = 1) +
   scale_colour_manual(values = "black") +
   scale_fill_manual(values = "black") +
